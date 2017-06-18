@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>Redis - Laravel's best friend | Presentation by Georgi Georgiev</title>
 
     <link rel="stylesheet" href="reveal.js-3.5.0/css/reveal.css">
     <link rel="stylesheet" href="reveal.js-3.5.0/css/theme/black.css">
@@ -20,12 +20,221 @@
         link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js-3.5.0/css/print/pdf.css' : 'reveal.js-3.5.0/css/print/paper.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
+    <style>
+        img {
+            max-height: 500px !important;
+        }
+    </style>
 </head>
 <body>
 <div class="reveal">
     <div class="slides">
-        <section>Slide 1</section>
-        <section>Slide 2</section>
+        <section>
+            <h1>Redis - Laravel's best friend</h1>
+        </section>
+        <section>
+            <h2>About me</h2>
+            <p>Georgi Georgiev</p>
+            <ul>
+                <li>Backend web developer at <a href="https://maniaci.net" target="_blank">Maniaci.Net</a></li>
+                <li>Using Laravel for two and a half years</li>
+                <li>Likes to run SQL queries on production</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Agenda</h2>
+            <ol>
+                <li>What is Redis?</li>
+                <li>How to install Redis?</li>
+                <li>When and how to use Redis in Laravel?</li>
+                <li>Advanced usage</li>
+                <li>Overview</li>
+            </ol>
+        </section>
+        <section>
+            <section>
+                <h2>1. What is Redis?</h2>
+                <img src="img/1.jpg" alt="1">
+            </section>
+            <section>
+                <img src="img/redis.png" alt="Redis logo">
+                <p>Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.</p>
+            </section>
+            <section>
+                <p>Redis supports data structures like:</p>
+                <ul>
+                    <li>strings</li>
+                    <li>hashes</li>
+                    <li>lists</li>
+                    <li>sets</li>
+                </ul>
+            </section>
+            <section>
+                <p>Redis also supports multiple databases per instance.</p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>2. How to install Redis?</h2>
+                <img src="img/2.jpg" alt="2">
+            </section>
+            <section>
+                <h3>2.1. For Ubuntu ()/Mint .</h3>
+                <pre><code>$ sudo add-apt-repository ppa:chris-lea/redis-server</code></pre>
+                <pre><code>$ sudo apt-get update</code></pre>
+                <pre><code>$ sudo apt-get install redis-server</code></pre>
+                <pre><code>$ service redis-server start</code></pre>
+            </section>
+            <section>
+                <h3>2.2. For CentOS 7.</h3>
+                <pre><code>$ sudo yum install epel-release</code></pre>
+                <pre><code>$ sudo yum install redis</code></pre>
+                <pre><code>$ service redis start</code></pre>
+            </section>
+            <section>
+                <h3>2.3. Redis CLI.</h3>
+                <pre><code>$ redis-cli</code></pre>
+                <pre><code>127.0.0.1:6379> KEYS *
+(empty list or set)
+127.0.0.1:6379> SET foo bar
+OK
+127.0.0.1:6379> KEYS *
+1) "foo"
+127.0.0.1:6379> GET foo
+"bar"
+127.0.0.1:6379> DEL foo
+(integer) 1
+127.0.0.1:6379> GET foo
+(nil)
+127.0.0.1:6379> KEYS *
+(empty list or set)</code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>3. When and how to use Redis in Laravel?</h2>
+                <img src="img/3.png" alt="3" style="background-color: #fff">
+            </section>
+            <section>
+                <p>You will need the Predis driver</p>
+                <pre><code>$ composer require predis/predis</code></pre>
+            </section>
+            <section>
+                <h3>3.1. Sessions.</h3>
+                <p>Update the .env<p>
+                <pre><code>SESSION_DRIVER=redis</code></pre>
+                <p>Even better, you can edit the config/session.php file:</p>
+                <pre><code>'connection' => 'sessions',</code></pre>
+            </section>
+            <section>
+                <p>And create the connection inside the config/database.php file:</p>
+                <pre><code>'redis' => [
+    'client' => 'predis',
+    'default' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', 6379),
+        'database' => 0,
+    ],
+    'sessions' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', 6379),
+        'database' => 1,
+    ],
+],</code></pre>
+            </section>
+            <section>
+                <h3>3.2. Cache.</h3>
+                <p>Update the .env<p>
+                <pre><code>CACHE_DRIVER=redis</code></pre>
+            </section>
+            <section>
+                <p>Example 1</p>
+                <pre><code>if (Cache::has('articles')) {
+    $articles = Cache::get('articles');
+} else {
+    $articles = Article::latest(10)->get();
+
+    Cache::put('articles', $articles, 5);
+}</code></pre>
+            </section>
+            <section>
+                <p>Example 2</p>
+                <pre><code>//in frontend
+if (Cache::has('logo')) {
+    $logo = Cache::get('logo');
+} else {
+    $logo = Logo::where('active', true)->first();
+
+    Cache::forever('logo', $logo);
+}
+
+//in admin panel
+$logo->active = true;
+$logo->save();
+
+Cache::forget('logo');</code></pre>
+            </section>
+            <section>
+                <p>Example 3</p>
+                <pre><code>if (Cache::has('view:welcome')) {
+    return Cache::get('view:welcome');
+}
+
+$view = View::make('welcome')->render();
+
+Cache::put('view:welcome', $view, 1);
+
+return $view;</code></pre>
+            </section>
+            <section>
+                <p>Example 4</p>
+                <pre><code>Redis::rPush('articles', serialize($request->all()));
+
+for ($i = 0; $i < Redis::lLen('articles'); $i++) {
+    Article::create(unserialize(Redis::lPop('articles')));
+}</code></pre>
+            </section>
+            <section>
+                <p>Example 5</p>
+                <pre><code>Redis::hMset('app', [
+    'url' => 'http://redis.maniaci.net',
+    'name' => 'Redis - Laravel\' best friend',
+]);
+
+$appUrl = Redis::hGet('app', 'url');
+$appName = Redis::hGet('app', 'name');</code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>4. Advanced usage</h2>
+                <img src="img/4.png" alt="4">
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>5. Overview</h2>
+                <img src="img/5.png" alt="5" style="background-color: #fff;">
+            </section>
+            <section>
+                <ul>
+                    <li>Easy to install and setup</li>
+                    <li>Easy to use</li>
+                    <li>Excellent performance</li>
+                    <li>Replication and clustering</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <h2>Time for questions</h2>
+            <img src="img/ihavenoidea.jpg" alt="I Have No Idea What I'm Doing">
+        </section>
+        <section>
+            <h2>Thank you</h2>
+            <img src="img/thanks.jpg" alt="T.Hanks">
+        </section>
     </div>
 </div>
 

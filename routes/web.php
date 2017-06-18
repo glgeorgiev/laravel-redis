@@ -11,4 +11,7 @@
 |
 */
 
-Route::get('/', 'PageController@index');
+Route::get('', 'PageController@index');
+Route::get('cache-articles', 'PageController@indexWithArticlesCache');
+Route::get('cache-view', 'PageController@indexWithViewCache');
+Route::get('redis-code', 'PageController@indexWithRawRedisCode');
