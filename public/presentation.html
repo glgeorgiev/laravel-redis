@@ -79,22 +79,26 @@
                 <img src="img/2.jpg" alt="2">
             </section>
             <section>
-                <h3>2.1. For Ubuntu ()/Mint .</h3>
-                <pre><code>$ sudo add-apt-repository ppa:chris-lea/redis-server</code></pre>
-                <pre><code>$ sudo apt-get update</code></pre>
-                <pre><code>$ sudo apt-get install redis-server</code></pre>
-                <pre><code>$ service redis-server start</code></pre>
+                <h3>2.1. For Ubuntu 14.04/Mint 17.01</h3>
+                <pre><code># add-apt-repository ppa:chris-lea/redis-server</code></pre>
+                <pre><code># apt-get update</code></pre>
+                <pre><code># apt-get install redis-server</code></pre>
+                <pre><code># service redis-server start</code></pre>
             </section>
             <section>
-                <h3>2.2. For CentOS 7.</h3>
-                <pre><code>$ sudo yum install epel-release</code></pre>
-                <pre><code>$ sudo yum install redis</code></pre>
-                <pre><code>$ service redis start</code></pre>
+                <h3>2.2. For CentOS 7</h3>
+                <pre><code># yum install epel-release</code></pre>
+                <pre><code># yum install redis</code></pre>
+                <pre><code># service redis start</code></pre>
             </section>
             <section>
-                <h3>2.3. Redis CLI.</h3>
-                <pre><code>$ redis-cli</code></pre>
-                <pre><code>127.0.0.1:6379> KEYS *
+                <h3>2.3. Vagrant</h3>
+                <p>You already have Redis :)</p>
+            </section>
+            <section>
+                <h3>2.4. Redis CLI</h3>
+                <pre><code class="nohighlight">$ redis-cli</code></pre>
+                <pre><code class="nohighlight">127.0.0.1:6379> KEYS *
 (empty list or set)
 127.0.0.1:6379> SET foo bar
 OK
@@ -117,7 +121,7 @@ OK
             </section>
             <section>
                 <p>You will need the Predis driver</p>
-                <pre><code>$ composer require predis/predis</code></pre>
+                <pre><code class="nohighlight">$ composer require predis/predis</code></pre>
             </section>
             <section>
                 <h3>3.1. Sessions.</h3>
@@ -212,6 +216,8 @@ $appName = Redis::hGet('app', 'name');</code></pre>
                 <h2>4. Advanced usage</h2>
                 <img src="img/4.png" alt="4">
             </section>
+            <section>
+            </section>
         </section>
         <section>
             <section>
@@ -250,7 +256,11 @@ $appName = Redis::hGet('app', 'name');</code></pre>
             { src: 'reveal.js-3.5.0/plugin/markdown/marked.js' },
             { src: 'reveal.js-3.5.0/plugin/markdown/markdown.js' },
             { src: 'reveal.js-3.5.0/plugin/notes/notes.js', async: true },
-            { src: 'reveal.js-3.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+            { src: 'reveal.js-3.5.0/plugin/highlight/highlight.js', async: true, callback: function() {
+                    hljs.configure({languages: ['php']});
+                    hljs.initHighlightingOnLoad();
+                }
+            }
         ]
     });
 </script>
