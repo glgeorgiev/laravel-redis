@@ -80,16 +80,16 @@
             </section>
             <section>
                 <h3>2.1. For Ubuntu 14.04/Mint 17.01</h3>
-                <pre><code># add-apt-repository ppa:chris-lea/redis-server</code></pre>
-                <pre><code># apt-get update</code></pre>
-                <pre><code># apt-get install redis-server</code></pre>
-                <pre><code># service redis-server start</code></pre>
+                <pre><code class="nohighlight"># add-apt-repository ppa:chris-lea/redis-server</code></pre>
+                <pre><code class="nohighlight"># apt-get update</code></pre>
+                <pre><code class="nohighlight"># apt-get install redis-server</code></pre>
+                <pre><code class="nohighlight"># service redis-server start</code></pre>
             </section>
             <section>
                 <h3>2.2. For CentOS 7</h3>
-                <pre><code># yum install epel-release</code></pre>
-                <pre><code># yum install redis</code></pre>
-                <pre><code># service redis start</code></pre>
+                <pre><code class="nohighlight"># yum install epel-release</code></pre>
+                <pre><code class="nohighlight"># yum install redis</code></pre>
+                <pre><code class="nohighlight"># service redis start</code></pre>
             </section>
             <section>
                 <h3>2.3. Vagrant</h3>
@@ -217,6 +217,68 @@ $appName = Redis::hGet('app', 'name');</code></pre>
                 <img src="img/4.png" alt="4">
             </section>
             <section>
+                <h3>4.1. Redis config file</h3>
+                <pre><code class="nohighlight">$ vim /etc/redis/redis.conf</code></pre>
+            </section>
+            <section>
+                <p>Network</p>
+                <pre><code class="nohighlight">bind 127.0.0.1</code></pre>
+                <pre><code class="nohighlight">bind 192.168.1.100 10.0.0.1</code></pre>
+            </section>
+            <section>
+                <p>Security</p>
+                <pre><code class="nohighlight">requirepass extremelysecretpassword</code></pre>
+                <pre><code class="nohighlight">rename-command CONFIG neizpalnyavaytazikomanda</code></pre>
+                <pre><code class="nohighlight">rename-command CONFIG ""</code></pre>
+            </section>
+            <section>
+                <p>Protected mode</p>
+                <pre><code class="nohighlight">protected-mode yes</code></pre>
+            </section>
+            <section>
+                <p>Number of databases</p>
+                <pre><code class="nohighlight">databases 16</code></pre>
+            </section>
+            <section>
+                <p>Snapshotting</p>
+                <pre><code class="nohighlight">save 900 1
+save 300 10
+save 60 10000</code></pre>
+                <pre><code class="nohighlight">dbfilename dump.rdb</code></pre>
+                <pre><code class="nohighlight">dir /var/lib/redis</code></pre>
+            </section>
+            <section>
+                <p>Replication</p>
+                <img src="img/tree.png" alt="3" style="background-color: #fff">
+            </section>
+            <section>
+                <pre><code class="nohighlight">slaveof 192.168.1.101 6379</code></pre>
+                <pre><code class="nohighlight">masterauth anotherstrongpassword</code></pre>
+                <pre><code class="nohighlight"># Should the slave reply to client requests
+# if not in sync with master
+slave-serve-stale-data yes</code></pre>
+                <pre><code class="nohighlight">slave-read-only yes</code></pre>
+            </section>
+            <section>
+                <p>Cluster</p>
+                <pre><code class="nohighlight">cluster-enabled yes</code></pre>
+                <pre><code class="nohighlight">cluster-config-file nodes-6379.conf</code></pre>
+                <pre><code class="nohighlight">cluster-node-timeout 15000</code></pre>
+            </section>
+            <section>
+                <h3>4.2. Sentinel</h3>
+                <p>Redis Sentinel provides high availability for Redis.</p>
+                <p>List of Sentinel capabilities:</p>
+                <ul>
+                    <li>Monitoring</li>
+                    <li>Notification</li>
+                    <li>Automatic failover</li>
+                    <li>Configuration provider</li>
+                </ul>
+            </section>
+            <section>
+                <pre><code class="nohighlight">redis-sentinel /path/to/sentinel.conf</code></pre>
+                <p>Default Sentinel port is 26379</p>
             </section>
         </section>
         <section>
