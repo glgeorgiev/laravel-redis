@@ -277,7 +277,7 @@ slave-serve-stale-data yes</code></pre>
                 </ul>
             </section>
             <section>
-                <pre><code class="nohighlight">redis-sentinel /path/to/sentinel.conf</code></pre>
+                <pre><code class="nohighlight"># redis-sentinel /path/to/sentinel.conf</code></pre>
                 <p>Default Sentinel port is 26379</p>
             </section>
         </section>
