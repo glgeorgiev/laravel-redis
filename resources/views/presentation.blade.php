@@ -165,7 +165,7 @@ OK
             </section>
             <section>
                 <p>Example 2</p>
-                <pre><code>//in frontend
+                <pre><code>//getting the logo
 if (Cache::has('logo')) {
     $logo = Cache::get('logo');
 } else {
@@ -174,7 +174,7 @@ if (Cache::has('logo')) {
     Cache::forever('logo', $logo);
 }
 
-//in admin panel
+//updating the logo
 $logo->active = true;
 $logo->save();
 
