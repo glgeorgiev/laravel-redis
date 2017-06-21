@@ -204,7 +204,7 @@ for ($i = 0; $i < Redis::lLen('articles'); $i++) {
                 <p>Example 5</p>
                 <pre><code>Redis::hMset('app', [
     'url' => 'http://redis.maniaci.net',
-    'name' => 'Redis - Laravel\' best friend',
+    'name' => 'Redis - Laravel\'s best friend',
 ]);
 
 $appUrl = Redis::hGet('app', 'url');
