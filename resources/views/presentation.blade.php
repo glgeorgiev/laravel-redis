@@ -79,7 +79,7 @@
                 <img src="img/2.jpg" alt="2">
             </section>
             <section>
-                <h3>2.1. For Ubuntu 14.04/Mint 17.01</h3>
+                <h3>2.1. For Ubuntu 14.04/Mint 17</h3>
                 <pre><code class="nohighlight"># add-apt-repository ppa:chris-lea/redis-server</code></pre>
                 <pre><code class="nohighlight"># apt-get update</code></pre>
                 <pre><code class="nohighlight"># apt-get install redis-server</code></pre>
@@ -92,7 +92,7 @@
                 <pre><code class="nohighlight"># service redis start</code></pre>
             </section>
             <section>
-                <h3>2.3. Vagrant</h3>
+                <h3>2.3. Laravel Homestead</h3>
                 <p>You already have Redis :)</p>
             </section>
             <section>
